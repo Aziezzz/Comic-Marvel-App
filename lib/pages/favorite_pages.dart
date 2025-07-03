@@ -1,6 +1,8 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:marvel_comic_app/pages/home_pages.dart';
 import 'package:marvel_comic_app/pages/search_pages.dart';
+import 'package:marvel_comic_app/pages/profile_pages.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -9,12 +11,14 @@ class FavoritePage extends StatefulWidget {
   State<FavoritePage> createState() => _FavoritePageState();
 }
 
-class _FavoritePageState extends State<FavoritePage> {
+class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMixin {
   int _selectedIndex = 2; // Index untuk "Favorit"
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
 
   final TextEditingController _searchController = TextEditingController();
   
-  // Sample Marvel comics data
+  // Sample Marvel comics data with enhanced properties for dark theme
   final List<Map<String, dynamic>> _marvelComics = [
     {
       'title': 'Amazing Spider-Man',
@@ -22,7 +26,9 @@ class _FavoritePageState extends State<FavoritePage> {
       'category': 'Superhero',
       'rating': 5,
       'image': 'assets/images/spiderman.jpg',
-      'color': Colors.red.shade400,
+      'primaryColor': const Color(0xFFE53E3E),
+      'secondaryColor': const Color(0xFFFF6B6B),
+      'icon': Icons.flash_on,
     },
     {
       'title': 'Iron Man: Extremis',
@@ -30,7 +36,9 @@ class _FavoritePageState extends State<FavoritePage> {
       'category': 'Superhero',
       'rating': 4,
       'image': 'assets/images/ironman.jpg',
-      'color': Colors.yellow.shade700,
+      'primaryColor': const Color(0xFFD69E2E),
+      'secondaryColor': const Color(0xFFECC94B),
+      'icon': Icons.engineering,
     },
     {
       'title': 'Thor: God of Thunder',
@@ -38,7 +46,9 @@ class _FavoritePageState extends State<FavoritePage> {
       'category': 'Fantasy',
       'rating': 5,
       'image': 'assets/images/thor.jpg',
-      'color': Colors.blue.shade600,
+      'primaryColor': const Color(0xFF3182CE),
+      'secondaryColor': const Color(0xFF63B3ED),
+      'icon': Icons.flash_on,
     },
     {
       'title': 'Black Widow',
@@ -46,7 +56,9 @@ class _FavoritePageState extends State<FavoritePage> {
       'category': 'Action',
       'rating': 4,
       'image': 'assets/images/blackwidow.jpg',
-      'color': Colors.black87,
+      'primaryColor': const Color(0xFF2D3748),
+      'secondaryColor': const Color(0xFF4A5568),
+      'icon': Icons.visibility,
     },
     {
       'title': 'Guardians of the Galaxy',
@@ -54,7 +66,9 @@ class _FavoritePageState extends State<FavoritePage> {
       'category': 'Sci-Fi',
       'rating': 4,
       'image': 'assets/images/guardians.jpg',
-      'color': Colors.purple.shade600,
+      'primaryColor': const Color(0xFF805AD5),
+      'secondaryColor': const Color(0xFFB794F6),
+      'icon': Icons.rocket_launch,
     },
   ];
 
@@ -64,6 +78,21 @@ class _FavoritePageState extends State<FavoritePage> {
   void initState() {
     super.initState();
     _filteredComics = _marvelComics;
+    
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _animationController.forward();
   }
 
   void _filterComics(String query) {
@@ -86,291 +115,533 @@ class _FavoritePageState extends State<FavoritePage> {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(5, (index) {
         return Icon(
-          index < rating ? Icons.star : Icons.star_border,
-          color: Colors.amber,
-          size: 16,
+          index < rating ? Icons.star_rounded : Icons.star_border_rounded,
+          color: const Color(0xFFFFD700),
+          size: 18,
         );
       }),
     );
   }
 
-  Widget _buildComicCard(Map<String, dynamic> comic) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            // ignore: deprecated_member_use
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            // Comic cover with Marvel-style design
-            Container(
-              width: 70,
-              height: 90,
+  Widget _buildComicCard(Map<String, dynamic> comic, int index) {
+    return AnimatedBuilder(
+      animation: _fadeAnimation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, 50 * (1 - _fadeAnimation.value)),
+          child: Opacity(
+            opacity: _fadeAnimation.value,
+            child: Container(
+              margin: EdgeInsets.fromLTRB(
+                20, 
+                index == 0 ? 20 : 10, 
+                20, 
+                index == _filteredComics.length - 1 ? 20 : 10
+              ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    comic['color'],
-                    comic['color'].withOpacity(0.7),
+                    Colors.white.withOpacity(0.1),
+                    Colors.white.withOpacity(0.05),
                   ],
+                ),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.2),
+                  width: 1,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: comic['color'].withOpacity(0.3),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 0,
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   ),
                 ],
               ),
-              child: Stack(
-                children: [
-                  // Marvel logo placeholder
-                  Positioned(
-                    top: 4,
-                    left: 4,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                      child: const Text(
-                        'MARVEL',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        // Enhanced comic cover with glassmorphism
+                        Container(
+                          width: 80,
+                          height: 110,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                comic['primaryColor'],
+                                comic['secondaryColor'],
+                              ],
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: comic['primaryColor'].withOpacity(0.4),
+                                spreadRadius: 0,
+                                blurRadius: 15,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: Stack(
+                            children: [
+                              // Animated background pattern
+                              Positioned.fill(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    gradient: RadialGradient(
+                                      center: Alignment.topRight,
+                                      radius: 1.5,
+                                      colors: [
+                                        Colors.white.withOpacity(0.3),
+                                        Colors.transparent,
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Marvel logo
+                              Positioned(
+                                top: 8,
+                                left: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFE53E3E),
+                                    borderRadius: BorderRadius.circular(4),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.3),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Text(
+                                    'MARVEL',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Character icon
+                              Center(
+                                child: Icon(
+                                  comic['icon'],
+                                  color: Colors.white.withOpacity(0.9),
+                                  size: 35,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 16),
+                        // Comic details with enhanced typography
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                comic['title'],
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  letterSpacing: 0.5,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                'By ${comic['author']}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white.withOpacity(0.7),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: comic['primaryColor'].withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: comic['primaryColor'].withOpacity(0.5),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Text(
+                                  comic['category'],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: comic['primaryColor'],
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              _buildStarRating(comic['rating']),
+                            ],
+                          ),
+                        ),
+                        // Glassmorphic favorite button
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.white.withOpacity(0.2),
+                                Colors.white.withOpacity(0.1),
+                              ],
+                            ),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(25),
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('${comic['title']} removed from favorites'),
+                                    backgroundColor: const Color(0xFF1A1A1A),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                              child: const Icon(
+                                Icons.favorite_rounded,
+                                color: Color(0xFFE53E3E),
+                                size: 24,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  // Character silhouette or icon
-                  Center(
-                    child: Icon(
-                      Icons.person,
-                      // ignore: deprecated_member_use
-                      color: Colors.white.withOpacity(0.8),
-                      size: 30,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-            const SizedBox(width: 16),
-            // Comic details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    comic['title'],
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Author: ${comic['author']}',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    comic['category'],
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: comic['color'],
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  _buildStarRating(comic['rating']),
-                ],
-              ),
-            ),
-            // Favorite button
-            IconButton(
-              onPressed: () {
-                // Handle favorite toggle
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('${comic['title']} removed from favorites'),
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.favorite,
-                color: Colors.red,
-                size: 24,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        backgroundColor: Colors.red[700],
-        elevation: 0,
-        iconTheme: const IconThemeData(
-          color: Colors.white, // Icon back jadi putih
-        ),
-        title: const Text(
-          'Marvel Favorites',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0F0F23),
+              Color(0xFF1A1A2E),
+              Color(0xFF16213E),
+              Color(0xFF0F0F23),
+            ],
+            stops: [0.0, 0.3, 0.7, 1.0],
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Search bar
-            Container(
-              color: Colors.red[700],
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: Container(
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Glassmorphic header
+              Container(
+                margin: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                      // ignore: deprecated_member_use
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: _filterComics,
-                  decoration: const InputDecoration(
-                    hintText: 'Search Marvel comics...',
-                    hintStyle: TextStyle(color: Colors.grey),
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.white.withOpacity(0.1),
+                      Colors.white.withOpacity(0.05),
+                    ],
+                  ),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1,
                   ),
                 ),
-              ),
-            ),
-            // Comics list
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
-              child: _filteredComics.isEmpty
-                  ? Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.search_off,
-                            size: 64,
-                            color: Colors.grey[400],
+                          // Header title
+                          Row(
+                            children: [
+                              Container(
+                                width: 4,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(2),
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Color(0xFFE53E3E),
+                                      Color(0xFFFF6B6B),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              const Text(
+                                'Marvel Favorites',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'No comics found',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.w500,
+                          const SizedBox(height: 20),
+                          // Enhanced search bar
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.white.withOpacity(0.1),
+                                  Colors.white.withOpacity(0.05),
+                                ],
+                              ),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.2),
+                                width: 1,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Try searching with different keywords',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[500],
+                            child: TextField(
+                              controller: _searchController,
+                              onChanged: _filterComics,
+                              style: const TextStyle(color: Colors.white),
+                              decoration: InputDecoration(
+                                hintText: 'Search your favorite comics...',
+                                hintStyle: TextStyle(
+                                  color: Colors.white.withOpacity(0.5),
+                                  fontSize: 16,
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.search_rounded,
+                                  color: Colors.white.withOpacity(0.7),
+                                  size: 24,
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 16,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      itemCount: _filteredComics.length,
-                      itemBuilder: (context, index) {
-                        return _buildComicCard(_filteredComics[index]);
-                      },
                     ),
-            ),
-          ],
+                  ),
+                ),
+              ),
+              // Comics list
+              Expanded(
+                child: _filteredComics.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.white.withOpacity(0.1),
+                                    Colors.white.withOpacity(0.05),
+                                  ],
+                                ),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.2),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.search_off_rounded,
+                                size: 40,
+                                color: Colors.white.withOpacity(0.5),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              'No comics found',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white.withOpacity(0.8),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Try searching with different keywords',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white.withOpacity(0.5),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: _filteredComics.length,
+                        itemBuilder: (context, index) {
+                          return _buildComicCard(_filteredComics[index], index);
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.red[800],
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.transparent,
+              Colors.black.withOpacity(0.8),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: "Search",
+        ),
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.transparent,
+              selectedItemColor: const Color(0xFFE53E3E),
+              unselectedItemColor: Colors.white.withOpacity(0.5),
+              selectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 12,
+              ),
+              elevation: 0,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_rounded),
+                  label: "Home",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search_rounded),
+                  label: "Search",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.favorite_rounded),
+                  label: "Favorit",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person_rounded),
+                  label: "Profil",
+                ),
+              ],
+              onTap: (index) {
+                if (index != _selectedIndex) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                  
+                  switch (index) {
+                    case 0:
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const HomePages(),
+                          transitionDuration: const Duration(milliseconds: 300),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(opacity: animation, child: child);
+                          },
+                        ),
+                      );
+                      break;
+                    case 1:
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const SearchPage(),
+                          transitionDuration: const Duration(milliseconds: 300),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(opacity: animation, child: child);
+                          },
+                        ),
+                      );
+                      break;
+                    case 2:
+                      // Current page - do nothing
+                      break;
+                    case 3:
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) => const ProfilPages(),
+                          transitionDuration: const Duration(milliseconds: 300),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(opacity: animation, child: child);
+                          },
+                        ),
+                      );
+                      break;
+                  }
+                }
+              },
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: "Favorit",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profil",
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          if (index == 0) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const HomePages()),
-            );
-          }
-          if (index == 1) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const SearchPage()),
-            );
-          }
-          // index 2 = halaman ini sendiri
-          // index 3 = profil (tambahkan jika ada halaman profil)
-        },
+        ),
       ),
     );
   }
@@ -378,6 +649,7 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   void dispose() {
     _searchController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_comic_app/pages/about_character_pages.dart';
-import 'package:marvel_comic_app/pages/favorite_pages.dart'; // Tambahkan import ini
-import 'package:marvel_comic_app/pages/profile_pages.dart'; // Tambahkan ini
+import 'package:marvel_comic_app/pages/favorite_pages.dart';
+import 'package:marvel_comic_app/pages/profile_pages.dart';
 import 'search_pages.dart';
 
 class HomePages extends StatelessWidget {
@@ -11,7 +11,7 @@ class HomePages extends StatelessWidget {
 
   // Data untuk Popular Marvel Characters
   final List<Map<String, String>> popularCharacters = const [
-    {'title': 'Iron Man', 'image': 'assets/iron_man.jpg', 'year': '2023'},
+    {'title': 'Iron Man', 'image_url':'https://www.google.com/url?sa=i&url=https%3A%2F%2Fmarvel.fandom.com%2Fwiki%2FInvincible_Iron_Man_Vol_5&psig=AOvVaw1ENrwtloGyPnwXSHnka4jX&ust=1751567581082000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMiC5-7nno4DFQAAAAAdAAAAABAS', 'year': '2023'},
     {
       'title': 'Spider-Man',
       'image': 'assets/spiderman_char.jpg',
@@ -90,128 +90,360 @@ class HomePages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isLargeScreen = screenWidth > 600;
+    
     return Scaffold(
-      // AppBar custom
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF1A1A2E),
+              Color(0xFF16213E),
+              Color(0xFF0F3460),
+            ],
+          ),
+        ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Header di tengah
-                const Center(
-                  child: Text(
-                    "MARVEL",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                      letterSpacing: 2.0,
+          child: CustomScrollView(
+            slivers: [
+              // Modern App Bar
+              SliverAppBar(
+                expandedHeight: 120,
+                floating: false,
+                pinned: true,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF1A1A2E),
+                          Color(0xFF16213E),
+                        ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Welcome back',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  const Text(
+                                    'User',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Color(0xFFE53E3E), Color(0xFFFC8181)],
+                                  ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0xFFE53E3E).withOpacity(0.3),
+                                      spreadRadius: 0,
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: const Text(
+                                  'MARVEL',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                // Welcome text di kiri atas
-                Align(
-                  alignment: Alignment.centerLeft,
+              ),
+              
+              // Content
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isLargeScreen ? 32 : 20,
+                    vertical: 20,
+                  ),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Welcome',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w400,
-                        ),
+                      // Section Popular Marvel Characters
+                      _buildModernSectionHeader(
+                        'Popular Characters',
+                        'Discover the most beloved Marvel heroes',
+                        onSeeAll: () {
+                          // Navigate to see all popular characters
+                        },
                       ),
-                      const Text(
-                        'User',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                        ),
+                      const SizedBox(height: 20),
+                      _buildResponsiveCardGrid(
+                        popularCharacters, 
+                        isCharacter: true,
+                        isLargeScreen: isLargeScreen,
                       ),
+
+                      const SizedBox(height: 40),
+
+                      // Section Spider-Man Comics
+                      _buildModernSectionHeader(
+                        'Spider-Man Comics',
+                        'Your friendly neighborhood web-slinger',
+                        onSeeAll: () {
+                          // Navigate to see all Spider-Man comics
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      _buildHorizontalScrollList(spiderManComics, isCharacter: false),
+
+                      const SizedBox(height: 40),
+
+                      // Section Latest Marvel Comics
+                      _buildModernSectionHeader(
+                        'Latest Comics',
+                        'Stay up to date with the newest releases',
+                        onSeeAll: () {
+                          // Navigate to see all latest comics
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      _buildHorizontalScrollList(latestComics, isCharacter: false),
+
+                      const SizedBox(height: 100), // Space for bottom nav
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
-      body: Container(
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Section Popular Marvel Characters
-                _buildSectionHeader(
-                  'POPULER MARVELS CHARACTER',
-                  onSeeAll: () {
-                    // Navigate to see all popular characters
-                  },
+      bottomNavigationBar: _buildModernBottomNav(context),
+    );
+  }
+
+  Widget _buildModernSectionHeader(String title, String subtitle, {required VoidCallback onSeeAll}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white.withOpacity(0.7),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: onSeeAll,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1,
+                  ),
                 ),
-                const SizedBox(height: 16),
-                _buildHorizontalCardList(popularCharacters, isCharacter: true),
-
-                const SizedBox(height: 32),
-
-                // Section Spider-Man Comics
-                _buildSectionHeader(
-                  'SPIDERMAN COMIC',
-                  onSeeAll: () {
-                    // Navigate to see all Spider-Man comics
-                  },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'See All',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 12,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                _buildHorizontalCardList(spiderManComics, isCharacter: false),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
-                const SizedBox(height: 32),
+  Widget _buildResponsiveCardGrid(List<Map<String, String>> items, 
+      {required bool isCharacter, required bool isLargeScreen}) {
+    if (isLargeScreen) {
+      return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 0.7,
+        ),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return _buildModernCard(context, item, isCharacter: isCharacter);
+        },
+      );
+    } else {
+      return _buildHorizontalScrollList(items, isCharacter: isCharacter);
+    }
+  }
 
-                // Section Latest Marvel Comics
-                _buildSectionHeader(
-                  'LATEST MARVEL COMICS',
-                  onSeeAll: () {
-                    // Navigate to see all latest comics
-                  },
-                ),
-                const SizedBox(height: 16),
-                _buildHorizontalCardList(latestComics, isCharacter: false),
+  Widget _buildHorizontalScrollList(List<Map<String, String>> items, {required bool isCharacter}) {
+    return SizedBox(
+      height: 300,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        itemCount: items.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 16),
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return _buildModernCard(context, item, isCharacter: isCharacter);
+        },
+      ),
+    );
+  }
 
-                const SizedBox(height: 20),
-              ],
+  Widget _buildModernCard(BuildContext context, Map<String, String> item, {required bool isCharacter}) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AboutCharacterPages(
+              characterName: item['title'] ?? '',
+              characterImage: item['image'] ?? '',
+              characterDescription: 'Deskripsi untuk ${item['title']}',
             ),
           ),
-        ),
+        );
+      },
+      child: ModernComicCard(
+        title: item['title']!,
+        imagePath: item['image']!,
+        year: item['year']!,
+        isCharacter: isCharacter,
       ),
-      bottomNavigationBar: BottomNavigationBar(
+    );
+  }
+
+  Widget _buildModernBottomNav(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF0F3460),
+            Color(0xFF16213E),
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 0,
+            blurRadius: 20,
+            offset: const Offset(0, -10),
+          ),
+        ],
+      ),
+      child: BottomNavigationBar(
         currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.red[800],
-        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        selectedItemColor: const Color(0xFFE53E3E),
+        unselectedItemColor: Colors.white.withOpacity(0.6),
+        selectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 12,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 11,
+        ),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_rounded),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.search_rounded),
             label: "Search",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: "Favorit",
+            icon: Icon(Icons.favorite_rounded),
+            label: "Favorites",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profil",
+            icon: Icon(Icons.person_rounded),
+            label: "Profile",
           ),
         ],
         onTap: (index) {
@@ -233,85 +465,19 @@ class HomePages extends StatelessWidget {
               MaterialPageRoute(builder: (context) => const ProfilPages()),
             );
           }
-          // Index 0 (Home) tidak perlu navigasi ulang
-        },
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title, {required VoidCallback onSeeAll}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
-          ),
-        ),
-        GestureDetector(
-          onTap: onSeeAll,
-          child: Row(
-            children: [
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: Colors.grey[600],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildHorizontalCardList(List<Map<String, String>> items,
-      {required bool isCharacter}) {
-    return SizedBox(
-      height: 280,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        itemCount: items.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 12),
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AboutCharacterPages(
-                    characterName: item['title'] ?? '',
-                    characterImage: item['image'] ?? '',
-                    characterDescription:
-                        'Deskripsi untuk ${item['title']}', // Ganti sesuai kebutuhan
-                  ),
-                ),
-              );
-            },
-            child: ComicCard(
-              title: item['title']!,
-              imagePath: item['image']!,
-              year: item['year']!,
-              isCharacter: isCharacter,
-            ),
-          );
         },
       ),
     );
   }
 }
 
-class ComicCard extends StatelessWidget {
+class ModernComicCard extends StatelessWidget {
   final String title;
   final String imagePath;
   final String year;
   final bool isCharacter;
 
-  const ComicCard({
+  const ModernComicCard({
     Key? key,
     required this.title,
     required this.imagePath,
@@ -321,80 +487,102 @@ class ComicCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 150,
-      child: Card(
-        elevation: 8,
-        shadowColor: Colors.black26,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Gambar comic/character
-            Expanded(
-              flex: 4,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
+    return Container(
+      width: 160,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 0,
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: isCharacter
+                  ? [
+                      const Color(0xFF667eea),
+                      const Color(0xFF764ba2),
+                      const Color(0xFF6B73FF),
+                    ]
+                  : [
+                      const Color(0xFFE53E3E),
+                      const Color(0xFFFC8181),
+                      const Color(0xFFFF6B6B),
+                    ],
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Image section
+              Expanded(
+                flex: 3,
                 child: Container(
+                  margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: isCharacter
-                          ? [
-                              Colors.blue[800]!,
-                              Colors.blue[600]!,
-                              Colors.purple[600]!,
-                            ]
-                          : [
-                              Colors.red[800]!,
-                              Colors.red[600]!,
-                              Colors.orange[600]!,
-                            ],
-                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white.withOpacity(0.1),
                   ),
                   child: Stack(
                     children: [
-                      // Placeholder untuk gambar
-                      Center(
-                        child: Icon(
-                          isCharacter ? Icons.person : Icons.menu_book,
-                          size: 50,
-                          // ignore: deprecated_member_use
-                          color: Colors.white.withOpacity(0.8),
+                      // Background pattern
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.white.withOpacity(0.1),
+                                Colors.white.withOpacity(0.05),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      // Marvel logo di pojok kiri atas
+                      // Main icon
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.2),
+                          ),
+                          child: Icon(
+                            isCharacter ? Icons.person_rounded : Icons.menu_book_rounded,
+                            size: 40,
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                        ),
+                      ),
+                      // Marvel badge
                       Positioned(
                         top: 8,
-                        left: 8,
+                        right: 8,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 3,
+                            horizontal: 8,
+                            vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.red[700],
-                            borderRadius: BorderRadius.circular(4),
-                            boxShadow: [
-                              BoxShadow(
-                                // ignore: deprecated_member_use
-                                color: Colors.black.withOpacity(0.3),
-                                spreadRadius: 1,
-                                blurRadius: 2,
-                                offset: const Offset(0, 1),
-                              ),
-                            ],
+                            color: Colors.black.withOpacity(0.7),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Text(
                             'MARVEL',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 9,
+                              fontSize: 8,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 0.5,
                             ),
@@ -405,51 +593,64 @@ class ComicCard extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            // Bagian text
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
+              // Info section
+              Container(
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                         height: 1.2,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          year,
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w400,
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            year,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        Icon(
-                          Icons.favorite_border,
-                          size: 16,
-                          color: Colors.grey[400],
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.2),
+                          ),
+                          child: Icon(
+                            Icons.favorite_border_rounded,
+                            size: 16,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
