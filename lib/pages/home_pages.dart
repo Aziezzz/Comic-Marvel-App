@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:marvel_comic_app/pages/about_character_pages.dart';
 import 'package:marvel_comic_app/pages/favorite_pages.dart';
@@ -11,7 +13,9 @@ class HomePages extends StatelessWidget {
 
   // Data untuk Popular Marvel Characters
   final List<Map<String, String>> popularCharacters = const [
-    {'title': 'Iron Man', 'image_url':'https://www.google.com/url?sa=i&url=https%3A%2F%2Fmarvel.fandom.com%2Fwiki%2FInvincible_Iron_Man_Vol_5&psig=AOvVaw1ENrwtloGyPnwXSHnka4jX&ust=1751567581082000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMiC5-7nno4DFQAAAAAdAAAAABAS', 'year': '2023'},
+    {'title': 'Iron Man', 
+     'image': 'assets/ironman.jpg', 
+     'year': '2023'},
     {
       'title': 'Spider-Man',
       'image': 'assets/spiderman_char.jpg',
@@ -22,7 +26,7 @@ class HomePages extends StatelessWidget {
       'image': 'assets/captain_america.jpg',
       'year': '2023'
     },
-    {'title': 'Thor', 'image': 'assets/thor.jpg', 'year': '2023'},
+    {'title': 'Venom', 'image': 'assets/venom.jpg', 'year': '2023'},
   ];
 
   // Data untuk Spider-Man Comics
@@ -116,6 +120,7 @@ class HomePages extends StatelessWidget {
                 pinned: true,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
+                automaticallyImplyLeading: false, // Tambahkan baris ini untuk menghilangkan icon back
                 flexibleSpace: FlexibleSpaceBar(
                   background: Container(
                     decoration: const BoxDecoration(

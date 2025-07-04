@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -385,7 +387,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     color: Colors.white.withOpacity(0.8),
                                     fontSize: 14,
                                   ),
-                                  children: [
+                                  children: const [
                                     TextSpan(
                                       text: 'Terms & Conditions',
                                       style: TextStyle(

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui';
@@ -44,37 +46,37 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   void _initializeCharacters() {
     _allCharacters = [
       MarvelCharacter(
-        name: 'A.I.M.',
+        name: 'The Amazing Spider-Man #1',
         image: '',
         description: 'Advanced Idea Mechanics - A scientific terrorist organization',
         powerLevel: 85,
       ),
       MarvelCharacter(
-        name: 'Abomination',
+        name: 'Spider-Man: No Way Home',
         image: '',
         description: 'Gamma-powered monster with incredible strength',
         powerLevel: 92,
       ),
       MarvelCharacter(
-        name: 'Absorbing Man',
+        name: 'Deadpool',
         image: '',
         description: 'Can absorb properties of any material he touches',
         powerLevel: 88,
       ),
       MarvelCharacter(
-        name: 'Abyss',
+        name: 'Venom',
         image: '',
         description: 'Mutant with teleportation and dimensional abilities',
         powerLevel: 79,
       ),
       MarvelCharacter(
-        name: 'Acolytes',
+        name: 'Hulk',
         image: '',
         description: 'Devoted followers of the master of magnetism',
         powerLevel: 72,
       ),
       MarvelCharacter(
-        name: 'Adam Destine',
+        name: 'Loki',
         image: '',
         description: 'Immortal member of the mystical Destine family',
         powerLevel: 83,
@@ -138,17 +140,17 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF0A0A0F),
-              const Color(0xFF1A1A2E),
-              const Color(0xFF16213E),
-              const Color(0xFF0F3460),
+              Color(0xFF0A0A0F),
+              Color(0xFF1A1A2E),
+              Color(0xFF16213E),
+              Color(0xFF0F3460),
             ],
-            stops: const [0.0, 0.3, 0.7, 1.0],
+            stops: [0.0, 0.3, 0.7, 1.0],
           ),
         ),
         child: SafeArea(
@@ -193,7 +195,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                             onChanged: _filterCharacters,
                             style: const TextStyle(color: Colors.white, fontSize: 16),
                             decoration: InputDecoration(
-                              hintText: 'Search Marvel heroes & villains...',
+                              hintText: 'Search Marvel comics...',
                               hintStyle: TextStyle(
                                 color: Colors.white.withOpacity(0.6),
                                 fontSize: 16,
@@ -584,10 +586,10 @@ class _CharacterCardState extends State<CharacterCard>
                               widthFactor: widget.character.powerLevel / 100,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(
+                                  gradient: const LinearGradient(
                                     colors: [
-                                      const Color(0xFFE53E3E),
-                                      const Color(0xFFFF6B6B),
+                                      Color(0xFFE53E3E),
+                                      Color(0xFFFF6B6B),
                                     ],
                                   ),
                                   borderRadius: BorderRadius.circular(2),

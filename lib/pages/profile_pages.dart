@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:marvel_comic_app/pages/login_pages.dart'; // Sesuaikan dengan path Anda
 
@@ -15,10 +17,10 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
 
   // Sample user data
   final Map<String, String> _userData = {
-    'firstName': 'Aaron',
-    'lastName': 'Graham',
-    'email': 'aarong@gmail.com',
-    'birth': 'January 15, 1995',
+    'firstName': 'Budiono',
+    'lastName': 'Siregar',
+    'email': 'Budionosiregar@gmail.com',
+    'birth': 'January 15, 1999',
     'gender': 'Male',
     'phone': '+62 812 3456 7890',
     'location': 'Jakarta, Indonesia',
@@ -494,15 +496,13 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF6B46C1),
-              Color(0xFF9333EA),
-              Color(0xFFEC4899),
-              Color(0xFFEF4444),
+              Color(0xFF1A1A2E),
+              Color(0xFF16213E),
+              Color(0xFF0F3460),
             ],
-            stops: [0.0, 0.3, 0.7, 1.0],
           ),
         ),
         child: SafeArea(
@@ -538,34 +538,20 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                                 ),
                               ),
                             ),
-                            const Spacer(),
-                            const Text(
-                              'Profile',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.white.withOpacity(0.3),
-                                  width: 1,
-                                ),
-                              ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.settings,
-                                  color: Colors.white,
-                                  size: 20,
+                            const Expanded(
+                              child: Center(
+                                child: Text(
+                                  'Profile',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
+                            // Spacer pengganti settings agar tetap rata tengah
+                            const SizedBox(width: 48), // Lebar kira-kira sama dengan tombol back/settings
                           ],
                         ),
                         
@@ -594,8 +580,8 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                                     child: Container(
                                       width: 80,
                                       height: 80,
-                                      decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
+                                      decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
                                           colors: [Color(0xFF6B46C1), Color(0xFF9333EA)],
                                         ),
                                         shape: BoxShape.circle,
@@ -767,15 +753,15 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                                   ),
                                   shadowColor: Colors.red.withOpacity(0.3),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(
+                                    Icon(
                                       Icons.logout_rounded,
                                       size: 20,
                                     ),
-                                    const SizedBox(width: 8),
-                                    const Text(
+                                    SizedBox(width: 8),
+                                    Text(
                                       'Logout',
                                       style: TextStyle(
                                         fontSize: 16,

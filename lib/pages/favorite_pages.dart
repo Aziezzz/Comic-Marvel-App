@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:marvel_comic_app/pages/home_pages.dart';
@@ -11,13 +13,14 @@ class FavoritePage extends StatefulWidget {
   State<FavoritePage> createState() => _FavoritePageState();
 }
 
-class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMixin {
+class _FavoritePageState extends State<FavoritePage>
+    with TickerProviderStateMixin {
   int _selectedIndex = 2; // Index untuk "Favorit"
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
   final TextEditingController _searchController = TextEditingController();
-  
+
   // Sample Marvel comics data with enhanced properties for dark theme
   final List<Map<String, dynamic>> _marvelComics = [
     {
@@ -78,12 +81,12 @@ class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMix
   void initState() {
     super.initState();
     _filteredComics = _marvelComics;
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -91,7 +94,7 @@ class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMix
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
-    
+
     _animationController.forward();
   }
 
@@ -132,12 +135,8 @@ class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMix
           child: Opacity(
             opacity: _fadeAnimation.value,
             child: Container(
-              margin: EdgeInsets.fromLTRB(
-                20, 
-                index == 0 ? 20 : 10, 
-                20, 
-                index == _filteredComics.length - 1 ? 20 : 10
-              ),
+              margin: EdgeInsets.fromLTRB(20, index == 0 ? 20 : 10, 20,
+                  index == _filteredComics.length - 1 ? 20 : 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
@@ -215,7 +214,8 @@ class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMix
                                 top: 8,
                                 left: 8,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 3),
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFE53E3E),
                                     borderRadius: BorderRadius.circular(4),
@@ -277,12 +277,14 @@ class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMix
                               ),
                               const SizedBox(height: 4),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
                                   color: comic['primaryColor'].withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: comic['primaryColor'].withOpacity(0.5),
+                                    color:
+                                        comic['primaryColor'].withOpacity(0.5),
                                     width: 1,
                                   ),
                                 ),
@@ -326,7 +328,8 @@ class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMix
                               onTap: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text('${comic['title']} removed from favorites'),
+                                    content: Text(
+                                        '${comic['title']} removed from favorites'),
                                     backgroundColor: const Color(0xFF1A1A1A),
                                     behavior: SnackBarBehavior.floating,
                                     shape: RoundedRectangleBorder(
@@ -546,101 +549,114 @@ class _FavoritePageState extends State<FavoritePage> with TickerProviderStateMix
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.transparent,
-              Colors.black.withOpacity(0.8),
+              Color(0xFF0F3460),
+              Color(0xFF16213E),
             ],
           ),
-        ),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: BottomNavigationBar(
-              currentIndex: _selectedIndex,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.transparent,
-              selectedItemColor: const Color(0xFFE53E3E),
-              unselectedItemColor: Colors.white.withOpacity(0.5),
-              selectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 12,
-              ),
-              elevation: 0,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_rounded),
-                  label: "Home",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search_rounded),
-                  label: "Search",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite_rounded),
-                  label: "Favorit",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_rounded),
-                  label: "Profil",
-                ),
-              ],
-              onTap: (index) {
-                if (index != _selectedIndex) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                  
-                  switch (index) {
-                    case 0:
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const HomePages(),
-                          transitionDuration: const Duration(milliseconds: 300),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(opacity: animation, child: child);
-                          },
-                        ),
-                      );
-                      break;
-                    case 1:
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const SearchPage(),
-                          transitionDuration: const Duration(milliseconds: 300),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(opacity: animation, child: child);
-                          },
-                        ),
-                      );
-                      break;
-                    case 2:
-                      // Current page - do nothing
-                      break;
-                    case 3:
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation, secondaryAnimation) => const ProfilPages(),
-                          transitionDuration: const Duration(milliseconds: 300),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(opacity: animation, child: child);
-                          },
-                        ),
-                      );
-                      break;
-                  }
-                }
-              },
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              spreadRadius: 0,
+              blurRadius: 20,
+              offset: const Offset(0, -10),
             ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          selectedItemColor: const Color(0xFFE53E3E),
+          unselectedItemColor: Colors.white.withOpacity(0.6),
+          selectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 12,
           ),
+          unselectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 11,
+          ),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search_rounded),
+              label: "Search",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_rounded),
+              label: "Favorits",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_rounded),
+              label: "Profile",
+            ),
+          ],
+          onTap: (index) {
+            if (index != _selectedIndex) {
+              setState(() {
+                _selectedIndex = index;
+              });
+
+              switch (index) {
+                case 0:
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const HomePages(),
+                      transitionDuration: const Duration(milliseconds: 300),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                            opacity: animation, child: child);
+                      },
+                    ),
+                  );
+                  break;
+                case 1:
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const SearchPage(),
+                      transitionDuration: const Duration(milliseconds: 300),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                            opacity: animation, child: child);
+                      },
+                    ),
+                  );
+                  break;
+                case 2:
+                  // Current page - do nothing
+                  break;
+                case 3:
+                  Navigator.pushReplacement(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          const ProfilPages(),
+                      transitionDuration: const Duration(milliseconds: 300),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                            opacity: animation, child: child);
+                      },
+                    ),
+                  );
+                  break;
+              }
+            }
+          },
         ),
       ),
     );
