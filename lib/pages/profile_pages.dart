@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:marvel_comic_app/pages/login_pages.dart'; // Sesuaikan dengan path Anda
 
 class ProfilPages extends StatefulWidget {
-  const ProfilPages({Key? key}) : super(key: key);
+  const ProfilPages({super.key});
 
   @override
   State<ProfilPages> createState() => _ProfilPagesState();
 }
 
-class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin {
+class _ProfilPagesState extends State<ProfilPages>
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -33,7 +34,7 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
-    
+
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -41,7 +42,7 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
-    
+
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
@@ -49,7 +50,7 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
       parent: _animationController,
       curve: Curves.easeOutCubic,
     ));
-    
+
     _animationController.forward();
   }
 
@@ -59,7 +60,8 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
     super.dispose();
   }
 
-  Future<void> _editField(String key, String label, {List<String>? options}) async {
+  Future<void> _editField(String key, String label,
+      {List<String>? options}) async {
     String? newValue = _userData[key];
     TextEditingController controller = TextEditingController(text: newValue);
 
@@ -148,7 +150,9 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                           items: options
                               .map((opt) => DropdownMenuItem(
                                     value: opt,
-                                    child: Text(opt, style: const TextStyle(color: Colors.white)),
+                                    child: Text(opt,
+                                        style: const TextStyle(
+                                            color: Colors.white)),
                                   ))
                               .toList(),
                           onChanged: (val) {
@@ -185,7 +189,9 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            _userData[key] = options == null ? controller.text : (newValue ?? '');
+                            _userData[key] = options == null
+                                ? controller.text
+                                : (newValue ?? '');
                           });
                           Navigator.of(context).pop();
                         },
@@ -311,7 +317,8 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                         onPressed: () {
                           Navigator.of(context).pop();
                           Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => const LoginPage()),
+                            MaterialPageRoute(
+                                builder: (context) => const LoginPage()),
                             (Route<dynamic> route) => false,
                           );
                         },
@@ -433,7 +440,8 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
     );
   }
 
-  Widget _buildStatsCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatsCard(
+      String title, String value, IconData icon, Color color) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -489,7 +497,7 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
-    
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -551,12 +559,14 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                               ),
                             ),
                             // Spacer pengganti settings agar tetap rata tengah
-                            const SizedBox(width: 48), // Lebar kira-kira sama dengan tombol back/settings
+                            const SizedBox(
+                                width:
+                                    48), // Lebar kira-kira sama dengan tombol back/settings
                           ],
                         ),
-                        
+
                         SizedBox(height: size.height * 0.03),
-                        
+
                         // Profile Avatar
                         Stack(
                           children: [
@@ -582,7 +592,10 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                                       height: 80,
                                       decoration: const BoxDecoration(
                                         gradient: LinearGradient(
-                                          colors: [Color(0xFF6B46C1), Color(0xFF9333EA)],
+                                          colors: [
+                                            Color(0xFF6B46C1),
+                                            Color(0xFF9333EA)
+                                          ],
                                         ),
                                         shape: BoxShape.circle,
                                       ),
@@ -601,7 +614,10 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                                       height: 32,
                                       decoration: BoxDecoration(
                                         gradient: const LinearGradient(
-                                          colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
+                                          colors: [
+                                            Color(0xFFEF4444),
+                                            Color(0xFFDC2626)
+                                          ],
                                         ),
                                         shape: BoxShape.circle,
                                         border: Border.all(
@@ -621,9 +637,9 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                             ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 16),
-                        
+
                         // User Name
                         Text(
                           '${_userData['firstName']} ${_userData['lastName']}',
@@ -633,9 +649,9 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        
+
                         const SizedBox(height: 4),
-                        
+
                         Text(
                           _userData['email']!,
                           style: TextStyle(
@@ -643,23 +659,26 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                             fontSize: 16,
                           ),
                         ),
-                        
+
                         const SizedBox(height: 20),
-                        
+
                         // Stats Cards
                         Row(
                           children: [
-                            _buildStatsCard('Comics', '247', Icons.book, const Color(0xFF6B46C1)),
+                            _buildStatsCard('Comics', '247', Icons.book,
+                                const Color(0xFF6B46C1)),
                             const SizedBox(width: 12),
-                            _buildStatsCard('Favorites', '89', Icons.favorite, const Color(0xFFEF4444)),
+                            _buildStatsCard('Favorites', '89', Icons.favorite,
+                                const Color(0xFFEF4444)),
                             const SizedBox(width: 12),
-                            _buildStatsCard('Reading', '12', Icons.timer, const Color(0xFF10B981)),
+                            _buildStatsCard('Reading', '12', Icons.timer,
+                                const Color(0xFF10B981)),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  
+
                   // Content Section
                   Expanded(
                     child: Container(
@@ -675,16 +694,17 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                         child: Column(
                           children: [
                             const SizedBox(height: 30),
-                            
+
                             // Profile Information
                             _buildProfileField(
                               label: 'First Name',
                               value: _userData['firstName']!,
                               icon: Icons.person_outline,
                               hasArrow: true,
-                              onTap: () => _editField('firstName', 'First Name'),
+                              onTap: () =>
+                                  _editField('firstName', 'First Name'),
                             ),
-                            
+
                             _buildProfileField(
                               label: 'Last Name',
                               value: _userData['lastName']!,
@@ -692,13 +712,13 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                               hasArrow: true,
                               onTap: () => _editField('lastName', 'Last Name'),
                             ),
-                            
+
                             _buildProfileField(
                               label: 'Email',
                               value: _userData['email']!,
                               icon: Icons.email_outlined,
                             ),
-                            
+
                             _buildProfileField(
                               label: 'Phone',
                               value: _userData['phone']!,
@@ -706,7 +726,7 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                               hasArrow: true,
                               onTap: () => _editField('phone', 'Phone'),
                             ),
-                            
+
                             _buildProfileField(
                               label: 'Birth Date',
                               value: _userData['birth']!,
@@ -714,15 +734,16 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                               hasArrow: true,
                               onTap: () => _editField('birth', 'Birth Date'),
                             ),
-                            
+
                             _buildProfileField(
                               label: 'Gender',
                               value: _userData['gender']!,
                               icon: Icons.person_pin_outlined,
                               hasArrow: true,
-                              onTap: () => _editField('gender', 'Gender', options: ['Male', 'Female', 'Other']),
+                              onTap: () => _editField('gender', 'Gender',
+                                  options: ['Male', 'Female', 'Other']),
                             ),
-                            
+
                             _buildProfileField(
                               label: 'Location',
                               value: _userData['location']!,
@@ -730,12 +751,13 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                               hasArrow: true,
                               onTap: () => _editField('location', 'Location'),
                             ),
-                            
+
                             const SizedBox(height: 30),
-                            
+
                             // Logout Button
                             Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 20),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               width: double.infinity,
                               height: 55,
                               child: ElevatedButton(
@@ -773,7 +795,7 @@ class _ProfilPagesState extends State<ProfilPages> with TickerProviderStateMixin
                                 ),
                               ),
                             ),
-                            
+
                             SizedBox(height: isTablet ? 40 : 30),
                           ],
                         ),

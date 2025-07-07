@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart'
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
-/// Example:
+/// Example:g
 /// ```dart
 /// import 'firebase_options.dart';
 /// // ...
@@ -72,5 +72,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'marvel-comic-2e86e.firebasestorage.app',
     iosBundleId: 'com.example.marvelComicApp',
   );
-
 }

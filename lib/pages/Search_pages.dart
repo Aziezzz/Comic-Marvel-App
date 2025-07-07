@@ -8,7 +8,7 @@ import 'package:marvel_comic_app/pages/favorite_pages.dart';
 import 'package:marvel_comic_app/pages/profile_pages.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  const SearchPage({super.key});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -26,12 +26,12 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     super.initState();
     _initializeCharacters();
     _filteredCharacters = _allCharacters;
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -39,7 +39,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
-    
+
     _animationController.forward();
   }
 
@@ -48,7 +48,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
       MarvelCharacter(
         name: 'The Amazing Spider-Man #1',
         image: '',
-        description: 'Advanced Idea Mechanics - A scientific terrorist organization',
+        description:
+            'Advanced Idea Mechanics - A scientific terrorist organization',
         powerLevel: 85,
       ),
       MarvelCharacter(
@@ -92,7 +93,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         _filteredCharacters = _allCharacters
             .where((character) =>
                 character.name.toLowerCase().contains(query.toLowerCase()) ||
-                character.description.toLowerCase().contains(query.toLowerCase()))
+                character.description
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
             .toList();
       }
     });
@@ -159,7 +162,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                
+
                 // Glassmorphic Search Bar
                 FadeTransition(
                   opacity: _fadeAnimation,
@@ -193,7 +196,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                           child: TextField(
                             controller: _searchController,
                             onChanged: _filterCharacters,
-                            style: const TextStyle(color: Colors.white, fontSize: 16),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16),
                             decoration: InputDecoration(
                               hintText: 'Search Marvel comics...',
                               hintStyle: TextStyle(
@@ -218,7 +222,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                                     )
                                   : null,
                               border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 18),
                             ),
                           ),
                         ),
@@ -226,9 +231,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 30),
-                
+
                 // Results Counter
                 FadeTransition(
                   opacity: _fadeAnimation,
@@ -244,7 +249,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       ),
                       const Spacer(),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: const Color(0xFFE53E3E).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),
@@ -265,16 +271,17 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // Characters Grid
                 Expanded(
                   child: FadeTransition(
                     opacity: _fadeAnimation,
                     child: GridView.builder(
                       physics: const BouncingScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
@@ -358,7 +365,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 ),
               ],
               onTap: (index) {
-                if (index != 1) { // Don't navigate if already on search page
+                if (index != 1) {
+                  // Don't navigate if already on search page
                   Widget page;
                   switch (index) {
                     case 0:
@@ -373,12 +381,14 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                     default:
                       return;
                   }
-                  
+
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => page,
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          page,
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
                         return FadeTransition(
                           opacity: animation,
                           child: child,
@@ -409,10 +419,10 @@ class CharacterCard extends StatefulWidget {
   final int index;
 
   const CharacterCard({
-    Key? key,
+    super.key,
     required this.character,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   State<CharacterCard> createState() => _CharacterCardState();
@@ -539,7 +549,7 @@ class _CharacterCardState extends State<CharacterCard>
                       ),
                     ),
                   ),
-                  
+
                   // Character Info
                   Expanded(
                     flex: 2,
@@ -683,7 +693,7 @@ class _CharacterCardState extends State<CharacterCard>
   Widget _getCharacterWidget(String name) {
     IconData iconData;
     Color iconColor = Colors.white;
-    
+
     switch (name.toLowerCase()) {
       case 'a.i.m.':
         iconData = Icons.science_rounded;

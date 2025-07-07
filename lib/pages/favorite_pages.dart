@@ -7,7 +7,7 @@ import 'package:marvel_comic_app/pages/search_pages.dart';
 import 'package:marvel_comic_app/pages/profile_pages.dart';
 
 class FavoritePage extends StatefulWidget {
-  const FavoritePage({Key? key}) : super(key: key);
+  const FavoritePage({super.key});
 
   @override
   State<FavoritePage> createState() => _FavoritePageState();
@@ -615,8 +615,7 @@ class _FavoritePageState extends State<FavoritePage>
                       transitionDuration: const Duration(milliseconds: 300),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                            opacity: animation, child: child);
+                        return FadeTransition(opacity: animation, child: child);
                       },
                     ),
                   );
@@ -630,8 +629,7 @@ class _FavoritePageState extends State<FavoritePage>
                       transitionDuration: const Duration(milliseconds: 300),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                            opacity: animation, child: child);
+                        return FadeTransition(opacity: animation, child: child);
                       },
                     ),
                   );
@@ -648,8 +646,7 @@ class _FavoritePageState extends State<FavoritePage>
                       transitionDuration: const Duration(milliseconds: 300),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                            opacity: animation, child: child);
+                        return FadeTransition(opacity: animation, child: child);
                       },
                     ),
                   );
