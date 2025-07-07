@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "646922758747",
+    "project_id": "marvel-comic-2e86e",
+    "storage_bucket": "marvel-comic-2e86e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646922758747:android:b7813312a8eef2b6f46d7e",
+        "android_client_info": {
+          "package_name": "com.example.marvel_comic_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb6W25qgj0IEtSePoFJE3AdfXTQVTnLqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
